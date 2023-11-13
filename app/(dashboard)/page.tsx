@@ -3,10 +3,29 @@ import { Button } from "@/components/ui/button";
 import { SignInButton, auth } from "@clerk/nextjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { CoursesList } from "@/components/courses-list";
+import { db } from "@/lib/db";
+import { getCoursesForGuest } from "@/actions/get-courses-for-guest";
+import { Categories } from "./_components/guest-categories";
+import { SearchInput } from "@/components/guest-search-input";
 
-const DashboardPage = () => {
+interface GuestSearchPageProps {
+  searchParams: {
+    title: string;
+    categoryId: string;
+  };
+}
+const DashboardPage = async ({ searchParams }: GuestSearchPageProps) => {
   const { userId } = auth();
   if (userId) return redirect("/dashboard");
+  const categories = await db.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+  const courses = await getCoursesForGuest({
+    ...searchParams,
+  });
   return (
     <div>
       <div className="w-full h-[80px] fixed bg-slate-100 shadow-md px-8 flex items-center justify-between">
@@ -22,8 +41,14 @@ const DashboardPage = () => {
           </Link>
         </div>
       </div>
-      {/* <NavbarWithoutSignIn /> */}
-      <CoursesWithoutSignIn />
+      <div className="pt-[90px] p-6">
+        <div className="block pb-6">
+          <SearchInput />
+        </div>
+        <Categories items={categories} />
+
+        <CoursesList items={courses} />
+      </div>
     </div>
   );
 };
