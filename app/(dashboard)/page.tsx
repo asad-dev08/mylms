@@ -28,7 +28,7 @@ const DashboardPage = async ({ searchParams }: GuestSearchPageProps) => {
   });
   return (
     <div>
-      <div className="w-full h-[80px] fixed bg-slate-100 shadow-md px-8 flex items-center justify-between">
+      <div className="w-full h-[80px] fixed bg-slate-100 shadow-md px-8 flex items-center justify-between z-[99]">
         <h1 className="font-bold text-transparent text-3xl bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-600">
           Learning Management
         </h1>
@@ -41,13 +41,17 @@ const DashboardPage = async ({ searchParams }: GuestSearchPageProps) => {
           </Link>
         </div>
       </div>
-      <div className="pt-[90px] p-6">
+      <div className="pt-[90px] p-6 min-h-[calc(100vh-50px)]">
         <div className="block pb-6">
           <SearchInput />
         </div>
         <Categories items={categories} />
 
         <CoursesList items={courses} />
+      </div>
+
+      <div className="w-full bg-slate-900 text-white py-6 px-8">
+        &copy;Copyright | {new Date().getFullYear()}, SoftShore Technology
       </div>
     </div>
   );
