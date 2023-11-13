@@ -10,10 +10,9 @@ interface SidebarItemProps {
 export const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
-  const isActive =
-    (pathname === "/" && href === "/") ||
-    pathname === href ||
-    pathname?.startsWith(`${href}/`);
+  const isActive = (pathname === "/" && href === "/") || pathname === href;
+  //||
+  //pathname?.startsWith(`${href}/`);
   const handleClick = () => {
     router.push(href);
   };

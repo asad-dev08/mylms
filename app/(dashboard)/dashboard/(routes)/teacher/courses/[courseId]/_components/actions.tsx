@@ -2,41 +2,34 @@
 
 import { ConfirmModal } from "@/components/modals/confirm-modal";
 import { Button } from "@/components/ui/button";
+import { useConfettiStore } from "@/hooks/react-confetti-store";
 import axios from "axios";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-interface ChapterActionsProps {
+interface ActionsProps {
   disabled: boolean;
-  courseId: string;
-  chapterId: string;
+  courseId: String;
   isPublished: boolean;
 }
-export const ChapterActions = ({
-  disabled,
-  courseId,
-  chapterId,
-  isPublished,
-}: ChapterActionsProps) => {
+export const Actions = ({ disabled, courseId, isPublished }: ActionsProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const confetti = useConfettiStore();
 
   const onClick = async () => {
     try {
       setIsLoading(true);
       if (isPublished) {
-        await axios.patch(
-          `/api/courses/${courseId}/chapters/${chapterId}/unpublish`
-        );
-        toast.success("Chapter Unpublished!");
+        await axios.patch(`/api/courses/${courseId}/unpublish`);
+        toast.success("Course Unpublished!");
       }
       if (!isPublished) {
-        await axios.patch(
-          `/api/courses/${courseId}/chapters/${chapterId}/publish`
-        );
-        toast.success("Chapter Published!");
+        await axios.patch(`/api/courses/${courseId}/publish`);
+        toast.success("Course Published!");
+        confetti.onOpen();
       }
       router.refresh();
     } catch (error) {
@@ -49,10 +42,10 @@ export const ChapterActions = ({
   const onDelete = async () => {
     try {
       setIsLoading(true);
-      await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`);
-      toast.success("Chapter Deleted!");
+      await axios.delete(`/api/courses/${courseId}`);
+      toast.success("Course Deleted!");
       router.refresh();
-      router.push(`/teacher/courses/${courseId}`);
+      router.push(`/dashboard/teacher/courses`);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {

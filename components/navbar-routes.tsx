@@ -10,7 +10,7 @@ import { isTeacher } from "@/lib/teacher";
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
-  const isTeacherPage = pathname?.startsWith("/teacher");
+  const isTeacherPage = pathname?.startsWith("/dashboard/teacher");
   const isCoursePage = pathname?.includes("/courses");
   const isSearchPage = pathname?.includes("/search");
   const { userId } = useAuth();
@@ -30,7 +30,7 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         ) : isTeacher(userId) ? (
-          <Link href="/teacher/courses">
+          <Link href="/dashboard/teacher/courses">
             <Button size="sm" variant="outline">
               Teacher Mode
             </Button>

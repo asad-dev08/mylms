@@ -3,7 +3,7 @@ import { CoursesList } from "@/components/courses-list";
 import { UserButton, auth } from "@clerk/nextjs";
 import { CheckCircle, Clock } from "lucide-react";
 import { redirect } from "next/navigation";
-import { InfoCard } from "./_components/info-card";
+import { InfoCard } from "./(routes)/_components/info-card";
 
 export default async function Dashboard() {
   const { userId } = auth();
