@@ -21,10 +21,10 @@ const SingleCoursePage = async ({
       },
     },
   });
-  if (!course) {
-    return redirect("/");
-  }
-  return redirect(`/courses/${course.id}/chapters/${course.chapters[0].id}`);
+  // if (!course) {
+  //   return redirect("/");
+  // }
+  return redirect(`/courses/${course!.id}/chapters/${course!.chapters[0].id}`);
 };
 
 export default SingleCoursePage;

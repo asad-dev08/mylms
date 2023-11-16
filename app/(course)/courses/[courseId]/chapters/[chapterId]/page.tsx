@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
 import { File } from "lucide-react";
 import { CourseProgressButton } from "./_components/course-progress-button";
+import { getChapterForGuest } from "@/actions/get-chapter-for-guest";
 
 const SingleChapter = async ({
   params,
@@ -15,7 +16,7 @@ const SingleChapter = async ({
   params: { courseId: string; chapterId: string };
 }) => {
   const { userId } = auth();
-  if (!userId) return redirect("/");
+  //if (!userId) return redirect("/");
 
   const {
     chapter,
@@ -25,18 +26,23 @@ const SingleChapter = async ({
     nextChapter,
     userProgress,
     purchase,
-  } = await getChapter({
-    userId,
-    chapterId: params.chapterId,
-    courseId: params.courseId,
-  });
+  } = userId
+    ? await getChapter({
+        userId: userId!,
+        chapterId: params.chapterId,
+        courseId: params.courseId,
+      })
+    : await getChapterForGuest({
+        chapterId: params.chapterId,
+        courseId: params.courseId,
+      });
 
-  if (!chapter || !course) {
-    return redirect("/");
-  }
-  const isLocked = !chapter.isFree && !purchase;
+  // if (!chapter || !course) {
+  //   return redirect("/");
+  // }
+  //console.log("ch: ", chapter);
+  const isLocked = !chapter!.isFree && !purchase;
   const completeOnEnd = !!purchase && !userProgress?.isComplete;
-
   return (
     <div>
       {userProgress?.isComplete && (
@@ -55,7 +61,7 @@ const SingleChapter = async ({
         <div className="p-4">
           <VideoPlayer
             chapterId={params.chapterId}
-            title={chapter.title}
+            title={chapter!.title}
             courseId={params.courseId}
             nextChapterId={nextChapter?.id}
             playbackId={muxData?.playbackId!}
@@ -65,7 +71,7 @@ const SingleChapter = async ({
         </div>
         <div>
           <div className="p-4 flex flex-col md:!flex-row items-center justify-between">
-            <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
+            <h2 className="text-2xl font-semibold mb-2">{chapter!.title}</h2>
             {purchase ? (
               <CourseProgressButton
                 chapterId={params.chapterId}
@@ -75,20 +81,21 @@ const SingleChapter = async ({
               />
             ) : (
               <CourseEnrollButton
+                userId={userId}
                 courseId={params.courseId}
-                price={course.price!}
+                price={course!.price!}
               />
             )}
           </div>
           <Separator />
           <div>
-            <Preview value={chapter.description!} />
+            <Preview value={chapter!.description!} />
           </div>
-          {!!attachemnts.length && (
+          {!!attachemnts!.length && (
             <>
               <Separator />
               <div className="p-4">
-                {attachemnts.map((att) => (
+                {attachemnts!.map((att) => (
                   <a
                     href={att.url}
                     target="_blank"

@@ -51,7 +51,8 @@ const DashboardPage = async ({ searchParams }: GuestSearchPageProps) => {
       </div>
 
       <div className="w-full bg-slate-900 text-white py-6 px-8">
-        &copy;Copyright | {new Date().getFullYear()}, SoftShore Technology
+        &copy;Copyright | {new Date().getFullYear()}, Asadullah Sarker
+        {/* SoftShore Technology */}
       </div>
     </div>
   );

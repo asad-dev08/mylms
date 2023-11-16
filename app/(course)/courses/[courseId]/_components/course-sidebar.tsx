@@ -1,6 +1,13 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
-import { Chapter, Course, UserProgress } from "@prisma/client";
+import {
+  Chapter,
+  Course,
+  PrismaClient,
+  Prisma,
+  UserProgress,
+  Purchase,
+} from "@prisma/client";
 import { redirect } from "next/navigation";
 import { CourseSidebarItem } from "./course-sidebar-item";
 import { CourseProgress } from "@/components/course-progress";
@@ -18,16 +25,21 @@ export const CourseSidebar = async ({
   progressCount,
 }: CourseSidebarProps) => {
   const { userId } = auth();
-  if (!userId) return redirect("/");
-
-  const purchase = await db.purchase.findUnique({
-    where: {
-      userId_courseId: {
-        userId,
-        courseId: course.id,
+  //if (!userId) return redirect("/");
+  const prisma = new PrismaClient();
+  let purchase: Purchase | null = null;
+  if (userId) {
+    purchase = await db.purchase.findUnique({
+      where: {
+        userId_courseId: {
+          userId,
+          courseId: course.id,
+        },
       },
-    },
-  });
+    });
+  } else {
+    purchase = null;
+  }
 
   return (
     <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
@@ -46,7 +58,9 @@ export const CourseSidebar = async ({
             key={chapter.id}
             id={chapter.id}
             label={chapter.title}
-            isComplete={!!chapter.userProgress?.[0]?.isComplete}
+            isComplete={
+              userId ? !!chapter.userProgress?.[0]?.isComplete : false
+            }
             courseId={course.id}
             isLocked={!chapter.isFree && !purchase}
           />

@@ -20,7 +20,7 @@ const GuestLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </div>
       {/* <NavbarWithoutSignIn /> */}
-      <CoursesWithoutSignIn />
+      {/* <CoursesWithoutSignIn /> */}
       {children}
     </div>
   );

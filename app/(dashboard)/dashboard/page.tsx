@@ -7,11 +7,12 @@ import { InfoCard } from "./(routes)/_components/info-card";
 
 export default async function Dashboard() {
   const { userId } = auth();
-  if (!userId) {
-    return redirect("/");
-  }
+
+  // if (!userId) {
+  //   return redirect("/");
+  // }
   const { completedCourses, coursesInProgress } = await getDashboardCourses(
-    userId
+    userId!
   );
   return (
     <div className="p-6 space-y-4">

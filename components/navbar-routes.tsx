@@ -23,7 +23,7 @@ export const NavbarRoutes = () => {
         </div>
       )}
       <div className="flex items-center gap-x-2 ml-auto">
-        {isTeacherPage || isCoursePage ? (
+        {(isTeacherPage || isCoursePage) && userId ? (
           <Link href="/">
             <Button variant="destructive">
               <LogOut className="h-4 w-4 mr-2" /> Exit
@@ -37,6 +37,11 @@ export const NavbarRoutes = () => {
           </Link>
         ) : null}
         <UserButton afterSignOutUrl="/" />
+        {!userId && (
+          <Button variant="ghost" className="text-red-400">
+            Visitor, Log in to buy a course
+          </Button>
+        )}
       </div>
     </>
   );
