@@ -9,6 +9,9 @@
     "lint": "next lint",
     "postinstall": "prisma generate"
   },
+  "prisma": {
+    "seed": "ts-node scripts/seed.ts"
+  },
   "dependencies": {
     "@clerk/nextjs": "^4.25.1",
     "@hello-pangea/dnd": "^16.3.0",
@@ -57,6 +60,7 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
+    "ts-node": "^10.9.2",
     "typescript": "5.2.2",
     "uploadthing": "^5.7.1",
     "zod": "^3.22.4",
